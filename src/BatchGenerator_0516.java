@@ -232,6 +232,7 @@ final UI ui;
         System.out.println("changign data");
         ArrayList<TestID> tests = xml.getTests();
         TestID item = tests.get(row);
+        /*
         switch(col) {
                 case 0:
                     item.setTemplate(data);
@@ -285,7 +286,7 @@ final UI ui;
                     item.setTime(3, data);
                     tests.set(row, item);
                     break;
-        }
+        }*/
         xml.setTests(tests);
         System.out.println("just changed data: " + xml.getTests().get(0).getTestID());
     }

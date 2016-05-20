@@ -4,9 +4,8 @@
  * and open the template in the editor.
  */
 
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
-import org.w3c.dom.Element;
+import org.w3c.dom.*;
+import java.util.ArrayList;
 
 /**
  *
@@ -18,21 +17,19 @@ public class TestID implements Comparable<TestID>{
     String template;
     String function;
     String target;
-    String[] p;
-    String[] t;
+    ArrayList<Action> actionList;
     
     public TestID (Node testID) {
         this.testIDNode = testID;
         readNode();
     }
     
-    public TestID(String testid, String template, String function, String target, String[] p, String[] t) {
+    public TestID(String testid, String template, String function, String target, ArrayList<Action> actionList) {
         this.testID = testid;
         this.template = template;
         this.function = function;
         this.target = target;
-        this.p = p;
-        this.t = t;
+        this.actionList = actionList;
     }
     
     private void readNode() {
@@ -46,9 +43,34 @@ public class TestID implements Comparable<TestID>{
         function = eElement.getAttribute("F");
         target = eElement.getAttribute("Target");
         
+        Node node;
+        String nName;
+        for(int i = 0; i<childNodes.getLength(); i++) {
+            node = childNodes.item(i);
+            nName = node.getNodeName();
+            if(nName=="Function") {
+                function = ((Element)node).getAttribute("F");
+                target = ((Element)node).getAttribute("Target");
+            } else if(nName=="ActionList") {
+                NodeList actionNodes = node.getChildNodes();
+                Node aNode;
+                for(int j=0; j<actionNodes.getLength(); j++) {
+                    aNode = actionNodes.item(j);
+                    if(aNode.getNodeType()==Node.ELEMENT_NODE) {
+                        actionList.add(new Action(((Element)aNode).getAttribute("type"), aNode.getNodeValue()));
+                    }
+                }
+            }
+        }
+        
+        /*
         eElement = (Element) childNodes.item(3);
         p = new String[4];
         
+        NamedNodeMap map = childNodes.item(3).getAttributes();
+        for(int i=0; i<map.getLength(); i++) {
+            System.out.println("map item: " + i + ": " + map.item(i).getNodeName() + ": " + map.item(i).getTextContent());
+        }
         p[0] = eElement.getAttribute("Pone");
         p[1] = eElement.getAttribute("Ptwo");
         p[2] = eElement.getAttribute("Pthree");
@@ -59,7 +81,7 @@ public class TestID implements Comparable<TestID>{
         t[0] = eElement.getAttribute("Tone");
         t[1] = eElement.getAttribute("Ttwo");
         t[2] = eElement.getAttribute("Tthree");
-        t[3] = eElement.getAttribute("Tfour");
+        t[3] = eElement.getAttribute("Tfour");*/
     }
     
     @Override public int compareTo(TestID other) {
@@ -88,6 +110,15 @@ public class TestID implements Comparable<TestID>{
         return target;
     }
     
+    public ArrayList<Action> getActions() {
+        return actionList;
+    }
+    
+    public void setActions(ArrayList<Action> actions) {
+        actionList = actions;
+    }
+    
+    /*
     public String[] getPoint() {
         return p;
     }
@@ -111,7 +142,7 @@ public class TestID implements Comparable<TestID>{
     public void setTime(int i, String value) {
         t[i] = value;
     }
-    
+    */
     public void setTemplate(String template) {
         this.template = template;
     }

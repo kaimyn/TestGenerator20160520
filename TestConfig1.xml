@@ -4,7 +4,7 @@
 	<Path>C:/</Path>
 	<Template Temp="Genite101">
 		<TestID TID="0001">
-			<Function F="Lanague" Target="CHS" />
+			<Function F="Lanague" Target="CHS"/>
 			<Point Pone="1180 760" Ptwo="0 0" Pthree="0 0" Pfour="0 0" />
 			<Time Tone="2" Ttwo="5" Tthree="0" Tfour="0" />
 		</TestID>

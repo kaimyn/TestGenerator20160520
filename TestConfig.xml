@@ -4,126 +4,17 @@
 	<Path>C:/</Path>
 	<Template Temp="Genite101">
 		<TestID TID="0001">
-			<Function F="Lanague" Target="CHS" />
-			<Point Pone="1180 760" Ptwo="0 0" Pthree="0 0" Pfour="0 0" />
-			<Time Tone="2" Ttwo="5" Tthree="0" Tfour="0" />
+			<Function F="Lanague" Target="CHS"/>
+            <ActionList>
+                <Action Type="tap">1180 760"</Action>
+                <Action Type="wait">2</Action>
+                <Action Type="tap">0 0</Action>
+                <Action Type="wait">5</Action>
+                <Action Type="tap">0 0</Action>
+                <Action Type="wait">0</Action>
+                <Action Type="tap">0</Action>
+                <Action Type="wait">0</Action>
+            </ActionList>
 		</TestID>
-		<TestID TID="0002">
-			<Function F="Lanague" Target="DANISH" />
-			<Point Pone="960 760" Ptwo="0 0" Pthree="0 0" Pfour="0 0" />
-			<Time Tone="2" Ttwo="5" Tthree="0" Tfour="0" />
-		</TestID>
-		<TestID TID="0003">
-			<Function F="Lanague" Target="DUTCH" />
-			<Point Pone="380 760" Ptwo="0 0" Pthree="0 0" Pfour="0 0" />
-			<Time Tone="2" Ttwo="5" Tthree="0" Tfour="0" />
-		</TestID>
-		<TestID TID="0004">
-			<Function F="Lanague" Target="ENGLISH" />
-			<Point Pone="50 760" Ptwo="0 0" Pthree="0 0" Pfour="0 0" />
-			<Time Tone="2" Ttwo="5" Tthree="0" Tfour="0" />
-		</TestID>
-		<TestID TID="0005">
-			<Function F="Lanague" Target="FINNISH" />
-			<Point Pone="840 760" Ptwo="0 0" Pthree="0 0" Pfour="0 0" />
-			<Time Tone="2" Ttwo="5" Tthree="0" Tfour="0" />
-		</TestID>
-		<TestID TID="0006">
-			<Function F="Lanague" Target="FRENCH" />
-			<Point Pone="160 760" Ptwo="0 0" Pthree="0 0" Pfour="0 0" />
-			<Time Tone="2" Ttwo="5" Tthree="0" Tfour="0" />
-		</TestID>
-		<TestID TID="0007">
-			<Function F="Lanague" Target="GARMAN" />
-			<Point Pone="500 760" Ptwo="0 0" Pthree="0 0" Pfour="0 0" />
-			<Time Tone="2" Ttwo="5" Tthree="0" Tfour="0" />
-		</TestID>
-		<TestID TID="0008">
-			<Function F="Lanague" Target="ITALIAN" />
-			<Point Pone="1070 760" Ptwo="0 0" Pthree="0 0" Pfour="0 0" />
-			<Time Tone="2" Ttwo="5" Tthree="0" Tfour="0" />
-		</TestID>
-		<TestID TID="0009">
-			<Function F="Lanague" Target="NORWEGIAN" />
-			<Point Pone="730 760" Ptwo="0 0" Pthree="0 0" Pfour="0 0" />
-			<Time Tone="2" Ttwo="5" Tthree="0" Tfour="0" />
-		</TestID>
-		<TestID TID="0010">
-			<Function F="Lanague" Target="SPANISH" />
-			<Point Pone="270 760" Ptwo="0 0" Pthree="0 0" Pfour="0 0" />
-			<Time Tone="2" Ttwo="5" Tthree="0" Tfour="0" />
-		</TestID>
-		<TestID TID="0011">
-			<Function F="Lanague" Target="SWEDISH" />
-			<Point Pone="610 760" Ptwo="0 0" Pthree="0 0" Pfour="0 0" />
-			<Time Tone="2" Ttwo="5" Tthree="0" Tfour="0" />
-		</TestID>
-		<TestID TID="0012">
-			<Function F="Lanague" Target="NA" />
-			<Point Pone="610 0" Ptwo="0 0" Pthree="0 0" Pfour="0 0" />
-			<Time Tone="2" Ttwo="5" Tthree="0" Tfour="0" />
-		</TestID>
-	</Template>
-	<Template Temp="King">
-		<TestID TID="0001">
-			<Function F="Lanague" Target="CHS" />
-			<Point Pone="1180 760" Ptwo="0 0" Pthree="0 0" Pfour="0 0" />
-			<Time Tone="2" Ttwo="5" Tthree="0" Tfour="0" />
-		</TestID>
-		<TestID TID="0002">
-			<Function F="Lanague" Target="DANISH" />
-			<Point Pone="960 760" Ptwo="0 0" Pthree="0 0" Pfour="0 0" />
-			<Time Tone="2" Ttwo="5" Tthree="0" Tfour="0" />
-		</TestID>
-		<TestID TID="0003">
-			<Function F="Lanague" Target="DUTCH" />
-			<Point Pone="380 760" Ptwo="0 0" Pthree="0 0" Pfour="0 0" />
-			<Time Tone="2" Ttwo="5" Tthree="0" Tfour="0" />
-		</TestID>
-		<TestID TID="0004">
-			<Function F="Lanague" Target="ENGLISH" />
-			<Point Pone="50 760" Ptwo="0 0" Pthree="0 0" Pfour="0 0" />
-			<Time Tone="2" Ttwo="5" Tthree="0" Tfour="0" />
-		</TestID>
-		<TestID TID="0005">
-			<Function F="Lanague" Target="FINNISH" />
-			<Point Pone="840 760" Ptwo="0 0" Pthree="0 0" Pfour="0 0" />
-			<Time Tone="2" Ttwo="5" Tthree="0" Tfour="0" />
-		</TestID>
-		<TestID TID="0006">
-			<Function F="Lanague" Target="FRENCH" />
-			<Point Pone="160 760" Ptwo="0 0" Pthree="0 0" Pfour="0 0" />
-			<Time Tone="2" Ttwo="5" Tthree="0" Tfour="0" />
-		</TestID>
-		<TestID TID="0007">
-			<Function F="Lanague" Target="GARMAN" />
-			<Point Pone="500 760" Ptwo="0 0" Pthree="0 0" Pfour="0 0" />
-			<Time Tone="2" Ttwo="5" Tthree="0" Tfour="0" />
-		</TestID>
-		<TestID TID="0008">
-			<Function F="Lanague" Target="ITALIAN" />
-			<Point Pone="1070 760" Ptwo="0 0" Pthree="0 0" Pfour="0 0" />
-			<Time Tone="2" Ttwo="5" Tthree="0" Tfour="0" />
-		</TestID>
-		<TestID TID="0009">
-			<Function F="Lanague" Target="NORWEGIAN" />
-			<Point Pone="730 760" Ptwo="0 0" Pthree="0 0" Pfour="0 0" />
-			<Time Tone="2" Ttwo="5" Tthree="0" Tfour="0" />
-		</TestID>
-		<TestID TID="0010">
-			<Function F="Lanague" Target="SPANISH" />
-			<Point Pone="270 760" Ptwo="0 0" Pthree="0 0" Pfour="0 0" />
-			<Time Tone="2" Ttwo="5" Tthree="0" Tfour="0" />
-		</TestID>
-		<TestID TID="0011">
-			<Function F="Lanague" Target="SWEDISH" />
-			<Point Pone="610 760" Ptwo="0 0" Pthree="0 0" Pfour="0 0" />
-			<Time Tone="2" Ttwo="5" Tthree="0" Tfour="0" />
-		</TestID>
-		<TestID TID="0012">
-			<Function F="Lanague" Target="NA" />
-			<Point Pone="610 0" Ptwo="0 0" Pthree="0 0" Pfour="0 0" />
-			<Time Tone="2" Ttwo="5" Tthree="0" Tfour="0" />
-		</TestID>
-	</Template>
+    </Template>
 </FrontEnd>

@@ -61,6 +61,10 @@ public class XMLData {
         this.tests = tests;
     }
     
+    public void setSource(String source) {
+        this.source = source;
+    }
+    
     public void addTest(TestID test) {
         tests.add(test);
         Collections.sort(tests);
