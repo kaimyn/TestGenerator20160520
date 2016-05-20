@@ -68,6 +68,51 @@ public class FileIO {
         return xmlData;
     }
     
+    public static XMLData readXML(File fXmlFile) {
+        XMLData xmlData = null;
+        ArrayList<TestID> tests = null;
+        
+        try {
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(fXmlFile);
+            
+            //optional, but recommended
+            //read this - http://stackoverflow.com/questions/13786607/normalization-in-dom-parsing-with-java-how-does-it-work
+            doc.getDocumentElement().normalize();
+            
+            //Get Path
+            NodeList nNodeList = doc.getElementsByTagName("Path");
+            Node nNode = nNodeList.item(0);
+            String path = nNode.getTextContent();
+            
+            //Get Date
+            nNodeList = doc.getElementsByTagName("Date");
+            nNode = nNodeList.item(0);
+            String date = nNode.getTextContent();
+            
+            //Get Version- auto set to 1 for now
+            String version = "1";
+            
+            //Get Test information from TestID 
+            nNodeList = doc.getElementsByTagName("TestID");
+            tests = new ArrayList(nNodeList.getLength());
+            for(int j = 0; j<nNodeList.getLength(); j++) {
+                nNode = nNodeList.item(j);         
+                if(nNode.getNodeType()==Node.ELEMENT_NODE) {
+                    tests.add(j, new TestID(nNode));
+                }
+            }
+            
+            xmlData = new XMLData(fXmlFile.getPath(), path, date, version, tests);
+            System.out.println(fXmlFile.getPath());
+        
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return xmlData;
+    }
+    
     public static void xmlBackup(String source, String backup) {
         try {
             File fXmlFile = new File(source);
@@ -90,9 +135,9 @@ public class FileIO {
         Iterator i = tests.iterator();
         
         try {
-            FileWriter fw=new FileWriter("/Users/kinining/Coder/Java/TestGenerator_0516/TestConfigTest.xml",false);
+            //FileWriter fw=new FileWriter("TestConfigTest.xml",false);
             //when ready, switch the above to the below.  the above writes to a test xml, not the real one
-            //FileWriter fw=new FileWriter(source, false);
+            FileWriter fw=new FileWriter(source, false);
             
             fw.write("<?xml version=\"1.0\"?>\n");
             fw.write("<FrontEnd>\n");
@@ -130,7 +175,7 @@ public class FileIO {
         return true;
     }
     
-        public static void genBash(XMLData xml) {
+    public static void genBash(XMLData xml) {
         
         Iterator i = xml.getTests().iterator();
         try {
@@ -229,7 +274,7 @@ public class FileIO {
     try {
         input = new FileInputStream(source);
         output = new FileOutputStream(dest);
-        byte[] buf = new byte[1024];
+        byte[] buf = new byte[512];
         int bytesRead;
         while ((bytesRead = input.read(buf)) > 0) {
             output.write(buf, 0, bytesRead);

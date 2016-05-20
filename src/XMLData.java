@@ -66,4 +66,10 @@ public class XMLData {
         Collections.sort(tests);
     }
     
+    public TestID removeTest(int row) {
+        TestID target = tests.get(row);
+        tests.remove(row);
+        return target;
+    }
+    
 }

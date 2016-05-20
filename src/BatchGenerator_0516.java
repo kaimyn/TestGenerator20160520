@@ -23,13 +23,13 @@ public class BatchGenerator_0516 {
 
     private static String[] args;
     public static XMLData xml;
-    private static String backup = "/Users/kinining/Coder/Java/TestGenerator_0516/TestConfigBackup.xml";
+    private static String backup = "TestConfigBackup.xml";
     
     public static void main(String argv[]) {
 final UI ui;
         try {
 
-            String source = "/Users/kinining/Coder/Java/TestGenerator_0516/TestConfig.xml";
+            String source = "TestConfig.xml";
             
             
             //Moved below to FileIO
