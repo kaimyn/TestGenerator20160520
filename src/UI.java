@@ -17,7 +17,7 @@ import java.io.File;
 public class UI extends javax.swing.JFrame {
 
     private static XMLData xml;
-    private static TestID lastDeleted;
+    private static ArrayList<TestID> lastDeleted = new ArrayList<TestID>();
     /**
      * Creates new form UI
      */
@@ -78,6 +78,7 @@ public class UI extends javax.swing.JFrame {
         browseButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
         addTestButton = new javax.swing.JButton();
+        undoDeleteButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Bash Generator");
@@ -274,6 +275,13 @@ public class UI extends javax.swing.JFrame {
             }
         });
 
+        undoDeleteButton.setText("Undo Delete");
+        undoDeleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                undoDeleteButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -282,9 +290,6 @@ public class UI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -309,8 +314,13 @@ public class UI extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(addTestButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(deleteButton)))
-                        .addGap(0, 305, Short.MAX_VALUE))))
+                                .addComponent(deleteButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(undoDeleteButton)))
+                        .addGap(0, 305, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -331,10 +341,11 @@ public class UI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addTestButton)
-                    .addComponent(deleteButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(deleteButton)
+                    .addComponent(undoDeleteButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(31, 31, 31)
+                .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(undoSave)
                     .addComponent(savetoXML))
@@ -414,8 +425,20 @@ public class UI extends javax.swing.JFrame {
     }//GEN-LAST:event_pathFieldFocusLost
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-        // TODO add your handling code here:
+        int row = testTable.getSelectedRow();
+        if(row != -1) {
+            lastDeleted.add(xml.removeTest(row));
+            addXML(xml);
+        }
     }//GEN-LAST:event_deleteButtonActionPerformed
+
+    private void undoDeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoDeleteButtonActionPerformed
+        if(lastDeleted != null) {
+            xml.addTest(lastDeleted);
+            addXML(xml);
+            lastDeleted = null;
+        }
+    }//GEN-LAST:event_undoDeleteButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -479,6 +502,9 @@ public class UI extends javax.swing.JFrame {
             model.setValueAt(test.getTime(1), i, 9);
             model.setValueAt(test.getTime(2), i, 10);
             model.setValueAt(test.getTime(3), i, 11);
+        }
+        for(int i = tests.size(); i<rCount; i++) {
+            model.removeRow(i);
         }
         
     }
@@ -584,6 +610,7 @@ public class UI extends javax.swing.JFrame {
     private javax.swing.JTextField targetField;
     private javax.swing.JTextField templateField;
     private javax.swing.JTable testTable;
+    private javax.swing.JButton undoDeleteButton;
     private javax.swing.JButton undoSave;
     private javax.swing.JTextField xmlPath;
     // End of variables declaration//GEN-END:variables
