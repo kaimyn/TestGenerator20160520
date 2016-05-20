@@ -38,7 +38,7 @@ public class UI extends javax.swing.JFrame {
             }
         });
         
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        testTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
     }
 
     /**
@@ -366,8 +366,6 @@ public class UI extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel1.getAccessibleContext().setAccessibleName("Create New Test");
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -608,6 +606,7 @@ public class UI extends javax.swing.JFrame {
         System.out.println("changed data: " + xml.getTests().get(0).getTestID());
         FileIO.xmlWrite(xml, backup);
         System.out.println("saved data");
+        lastDeleted.clear();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
