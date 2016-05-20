@@ -278,9 +278,17 @@ public class UI extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Template", "TestID", "Function", "Target", "P1", "P2", "P3", "P4", "T1", "T2", "T3", "T4"
+                "Template", "TestID", "Function", "Target", "ActionList"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
         testTable.setPreferredSize(new java.awt.Dimension(1000, 0));
         jScrollPane1.setViewportView(testTable);
 

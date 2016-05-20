@@ -357,58 +357,16 @@
         <Component class="javax.swing.JTable" name="testTable">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="12" rowCount="0">
-                <Column editable="true" title="Template" type="java.lang.Object"/>
-                <Column editable="true" title="TestID" type="java.lang.Object"/>
-                <Column editable="true" title="Function" type="java.lang.Object"/>
-                <Column editable="true" title="Target" type="java.lang.Object"/>
-                <Column editable="true" title="P1" type="java.lang.Object"/>
-                <Column editable="true" title="P2" type="java.lang.Object"/>
-                <Column editable="true" title="P3" type="java.lang.Object"/>
-                <Column editable="true" title="P4" type="java.lang.Object"/>
-                <Column editable="true" title="T1" type="java.lang.Object"/>
-                <Column editable="true" title="T2" type="java.lang.Object"/>
-                <Column editable="true" title="T3" type="java.lang.Object"/>
-                <Column editable="true" title="T4" type="java.lang.Object"/>
+              <Table columnCount="5" rowCount="0">
+                <Column editable="true" title="Template" type="java.lang.String"/>
+                <Column editable="true" title="TestID" type="java.lang.String"/>
+                <Column editable="true" title="Function" type="java.lang.String"/>
+                <Column editable="true" title="Target" type="java.lang.String"/>
+                <Column editable="true" title="ActionList" type="java.lang.Object"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
               <TableColumnModel selectionModel="0">
-                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                  <Title/>
-                  <Editor/>
-                  <Renderer/>
-                </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                  <Title/>
-                  <Editor/>
-                  <Renderer/>
-                </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                  <Title/>
-                  <Editor/>
-                  <Renderer/>
-                </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                  <Title/>
-                  <Editor/>
-                  <Renderer/>
-                </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                  <Title/>
-                  <Editor/>
-                  <Renderer/>
-                </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                  <Title/>
-                  <Editor/>
-                  <Renderer/>
-                </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                  <Title/>
-                  <Editor/>
-                  <Renderer/>
-                </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                   <Title/>
                   <Editor/>
