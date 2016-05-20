@@ -34,6 +34,7 @@ public class TestID implements Comparable<TestID>{
     
     private void readNode() {
         testID = ((Element)testIDNode).getAttribute("TID");
+        actionList = new ArrayList<Action>();
         
         Element eElement = (Element) testIDNode.getParentNode();
         template = eElement.getAttribute("Temp");
@@ -57,7 +58,7 @@ public class TestID implements Comparable<TestID>{
                 for(int j=0; j<actionNodes.getLength(); j++) {
                     aNode = actionNodes.item(j);
                     if(aNode.getNodeType()==Node.ELEMENT_NODE) {
-                        actionList.add(new Action(((Element)aNode).getAttribute("type"), aNode.getNodeValue()));
+                        actionList.add(new Action(((Element)aNode).getAttribute("type"), aNode.getTextContent()));
                     }
                 }
             }
