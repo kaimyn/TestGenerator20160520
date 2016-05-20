@@ -28,7 +28,14 @@ public class BatchGenerator_0516 {
     public static void main(String argv[]) {
 final UI ui;
         try {
-
+            System.out.println("Chaue Rocks!!!!");
+            System.out.println("Chaue Rocks!!!!");
+            System.out.println("Chaue Rocks!!!!");
+            System.out.println("Chaue Rocks!!!!");
+            System.out.println("Chaue Rocks!!!!");
+            System.out.println("Chaue Rocks!!!!");
+            System.out.println("Chaue Rocks!!!!");
+            
             String source = "TestConfig.xml";
             
             
