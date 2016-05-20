@@ -157,11 +157,22 @@ public class FileIO {
                 fw.write("\t\t<TestID TID=\"" + currentTest.getTestID() + "\">\n");
                 fw.write("\t\t\t<Function F=\"" + currentTest.getFunction() + "\" Target=\"" + currentTest.getTarget() + "\" />\n");
                 
+                Iterator j = currentTest.getActions().iterator();
+                Action action;
+                fw.write("\t\t\t<ActionList>\n");
+                while(j.hasNext()) {
+                    action = (Action)j.next();
+                    fw.write("\t\t\t\t<Action Type=\"" + action.getType() + "\">" + action.getData() + "</Action>\n");
+                }
+                fw.write("\t\t\t</ActionList>\n");
+                /*
+                 * Changed to action list
                 String[] p = currentTest.getPoint();
                 fw.write("\t\t\t<Point Pone=\"" + p[0] + "\" Ptwo=\"" + p[1] + "\" Pthree=\"" + p[2] + "\" Pfour=\"" + p[3] + "\" />\n");
                 
                 String[] t = currentTest.getTime();
-                fw.write("\t\t\t<Time Tone=\"" + t[0] + "\" Ttwo=\"" + t[1] + "\" Tthree=\"" + t[2] + "\" Tfour=\"" + t[3] + "\" />\n");
+                fw.write("\t\t\t<Time Tone=\"" + t[0] + "\" Ttwo=\"" + t[1] + "\" Tthree=\"" + t[2] + "\" Tfour=\"" + t[3] + "\" />\n");*/
+                
                 fw.write("\t\t</TestID>\n");
             }
             
@@ -242,7 +253,7 @@ public class FileIO {
                 fw.write("\r\n");
                 fw.write(":%test%\r\n");
                 fw.write("echo %test%\r\n");
-                fw.write("adb shell \"input tap "+tmp.getPoint(0)+"\"\r\n");
+                /*fw.write("adb shell \"input tap "+tmp.getPoint(0)+"\"\r\n");
                 fw.write("timeout "+tmp.getTime(0)+"\r\n");
                 fw.write("adb shell \"input tap "+tmp.getPoint(1)+"\"\r\n");
                 fw.write("timeout "+tmp.getTime(1)+"\r\n");
@@ -256,7 +267,7 @@ public class FileIO {
                 fw.write("adb pull %hmi_path% %local_path%\r\n");
                 fw.write("\r\n");
                 fw.write("adb shell \"input tap Pone4\""+tmp.getPoint(3)+"\r\n");
-                fw.write("timeout "+tmp.getTime(3)+"\r\n");
+                fw.write("timeout "+tmp.getTime(3)+"\r\n");*/
                 fw.write("\r\n");
                 fw.write("\r\n");
                 fw.write("\r\n");

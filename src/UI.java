@@ -426,8 +426,8 @@ public class UI extends javax.swing.JFrame {
         if(!idField.getText().isEmpty() && !templateField.getText().isEmpty()) {
             String [] p = {p1Field.getText(), p2Field.getText(), p3Field.getText(), p4Field.getText()};
             String [] t = {t1Field.getText(), t2Field.getText(), t3Field.getText(), t4Field.getText()};
-            TestID newTest = new TestID(idField.getText(), templateField.getText(), functionField.getText(), targetField.getText(), p, t);
-            xml.addTest(newTest);
+            //TestID newTest = new TestID(idField.getText(), templateField.getText(), functionField.getText(), targetField.getText(), p, t);
+            //xml.addTest(newTest);
             addXML(xml);
         }
     }//GEN-LAST:event_addTestButtonActionPerformed
@@ -514,14 +514,14 @@ public class UI extends javax.swing.JFrame {
             model.setValueAt(test.getTestID(), i, 1);
             model.setValueAt(test.getFunction(), i, 2);
             model.setValueAt(test.getTarget(), i, 3);
-            model.setValueAt(test.getPoint(0), i, 4);
+            /*model.setValueAt(test.getPoint(0), i, 4);
             model.setValueAt(test.getPoint(1), i, 5);
             model.setValueAt(test.getPoint(2), i, 6);
             model.setValueAt(test.getPoint(3), i, 7);
             model.setValueAt(test.getTime(0), i, 8);
             model.setValueAt(test.getTime(1), i, 9);
             model.setValueAt(test.getTime(2), i, 10);
-            model.setValueAt(test.getTime(3), i, 11);
+            model.setValueAt(test.getTime(3), i, 11);*/
         }
         for(int i = tests.size(); i<rCount; i++) {
             model.removeRow(i);
@@ -568,7 +568,7 @@ public class UI extends javax.swing.JFrame {
                     item.setTarget(data);
                     tests.set(row, item);
                     break;
-                case 4:
+                /*case 4:
                     item.setPoint(0, data);
                     tests.set(row, item);
                     break;
@@ -599,7 +599,7 @@ public class UI extends javax.swing.JFrame {
                 case 11:
                     item.setTime(3, data);
                     tests.set(row, item);
-                    break;
+                    break;*/
         }
         xml.setTests(tests);
         System.out.println("just changed data: " + xml.getTests().get(0).getTestID());
