@@ -275,7 +275,8 @@ public class UI extends javax.swing.JFrame {
 
         testTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
                 "Template", "TestID", "Function", "Target", "ActionList"
@@ -445,8 +446,6 @@ public class UI extends javax.swing.JFrame {
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
 
-        jPanel1.getAccessibleContext().setAccessibleName("Create New Test");
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -505,8 +504,8 @@ public class UI extends javax.swing.JFrame {
         if(!idField.getText().isEmpty() && !templateField.getText().isEmpty()) {
             String [] p = {p1Field.getText(), p2Field.getText(), p3Field.getText(), p4Field.getText()};
             String [] t = {t1Field.getText(), t2Field.getText(), t3Field.getText(), t4Field.getText()};
-            TestID newTest = new TestID(idField.getText(), templateField.getText(), functionField.getText(), targetField.getText(), p, t);
-            xml.addTest(newTest);
+            //TestID newTest = new TestID(idField.getText(), templateField.getText(), functionField.getText(), targetField.getText(), p, t);
+            //xml.addTest(newTest);
             addXML(xml);
         }
     }//GEN-LAST:event_addTestButtonActionPerformed
@@ -592,22 +591,24 @@ public class UI extends javax.swing.JFrame {
         TestID test;
         for(int i = 0; i<tests.size(); i++) {
             if(i+1>rCount) model.addRow((Object[])null);
+            System.out.println("add data to row " + i);
             test = tests.get(i);
             model.setValueAt(test.getTemplate(), i, 0);
             model.setValueAt(test.getTestID(), i, 1);
             model.setValueAt(test.getFunction(), i, 2);
             model.setValueAt(test.getTarget(), i, 3);
-            model.setValueAt(test.getPoint(0), i, 4);
+            /*model.setValueAt(test.getPoint(0), i, 4);
             model.setValueAt(test.getPoint(1), i, 5);
             model.setValueAt(test.getPoint(2), i, 6);
             model.setValueAt(test.getPoint(3), i, 7);
             model.setValueAt(test.getTime(0), i, 8);
             model.setValueAt(test.getTime(1), i, 9);
             model.setValueAt(test.getTime(2), i, 10);
-            model.setValueAt(test.getTime(3), i, 11);
+            model.setValueAt(test.getTime(3), i, 11);*/
         }
         for(int i = tests.size(); i<rCount; i++) {
             model.removeRow(i);
+            System.out.println("removed row");
         }
         resizeColumnWidth(testTable);
         
@@ -627,31 +628,35 @@ public class UI extends javax.swing.JFrame {
     public static void updateXMLData(String data, int row, int col) {
         //xml.updateTest(data, row, col);
         
-        System.out.println("changign data");
         ArrayList<TestID> tests = xml.getTests();
         TestID item = tests.get(row);
         switch(col) {
                 case 0:
                     item.setTemplate(data);
                     tests.set(row, item);
+                    System.out.println("change template");
+                    System.out.println("just changed data: " + xml.getTests().get(row).getTemplate());
                     break;
                 case 1:
                     item.setTestID(data);
                     tests.set(row, item);
                     xml.setTests(tests);
-                    System.out.println("raw data: " + data);
                     System.out.println("change testid");
-                    System.out.println("just changed data: " + xml.getTests().get(0).getTestID());
+                    System.out.println("just changed data: " + xml.getTests().get(row).getTestID());
                     break;
                 case 2:
                     item.setFunction(data);
                     tests.set(row, item);
+                    System.out.println("change function");
+                    System.out.println("just changed data: " + xml.getTests().get(row).getFunction());
                     break;
                 case 3:
                     item.setTarget(data);
                     tests.set(row, item);
+                    System.out.println("change target");
+                    System.out.println("just changed data: " + xml.getTests().get(row).getTarget());
                     break;
-                case 4:
+                /*case 4:
                     item.setPoint(0, data);
                     tests.set(row, item);
                     break;
@@ -682,17 +687,15 @@ public class UI extends javax.swing.JFrame {
                 case 11:
                     item.setTime(3, data);
                     tests.set(row, item);
-                    break;
+                    break;*/
         }
         xml.setTests(tests);
-        System.out.println("just changed data: " + xml.getTests().get(0).getTestID());
     }
     
     private static String backup = "TestConfigBackup.xml";
     public static void saveXMLtoFile() {
-        System.out.println("changed data: " + xml.getTests().get(0).getTestID());
         FileIO.xmlWrite(xml, backup);
-        System.out.println("saved data");
+        //System.out.println("saved data");
         lastDeleted.clear();
     }
 
