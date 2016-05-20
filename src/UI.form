@@ -54,6 +54,8 @@
                               <Component id="savetoXML" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="undoSave" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="generateButton" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="addTestButton" min="-2" max="-2" attributes="0"/>
@@ -103,6 +105,7 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="undoSave" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="savetoXML" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="generateButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
@@ -469,6 +472,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="undoDeleteButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="generateButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Generate Bash"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="generateButtonActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

@@ -79,6 +79,7 @@ public class UI extends javax.swing.JFrame {
         deleteButton = new javax.swing.JButton();
         addTestButton = new javax.swing.JButton();
         undoDeleteButton = new javax.swing.JButton();
+        generateButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Bash Generator");
@@ -282,6 +283,13 @@ public class UI extends javax.swing.JFrame {
             }
         });
 
+        generateButton.setText("Generate Bash");
+        generateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                generateButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -310,7 +318,9 @@ public class UI extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(savetoXML)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(undoSave))
+                                .addComponent(undoSave)
+                                .addGap(18, 18, 18)
+                                .addComponent(generateButton))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(addTestButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -348,7 +358,8 @@ public class UI extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(undoSave)
-                    .addComponent(savetoXML))
+                    .addComponent(savetoXML)
+                    .addComponent(generateButton))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -433,12 +444,16 @@ public class UI extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteButtonActionPerformed
 
     private void undoDeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoDeleteButtonActionPerformed
-        if(lastDeleted != null) {
-            xml.addTest(lastDeleted);
+        if(!lastDeleted.isEmpty()) {
+            xml.addTest(lastDeleted.get(lastDeleted.size()-1));
             addXML(xml);
-            lastDeleted = null;
+            lastDeleted.remove(lastDeleted.size()-1);
         }
     }//GEN-LAST:event_undoDeleteButtonActionPerformed
+
+    private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
+        if(xml!= null) FileIO.genBash(xml);
+    }//GEN-LAST:event_generateButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -586,6 +601,7 @@ public class UI extends javax.swing.JFrame {
     private javax.swing.JTextField dateField;
     private javax.swing.JButton deleteButton;
     private javax.swing.JTextField functionField;
+    private javax.swing.JButton generateButton;
     private javax.swing.JTextField idField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
