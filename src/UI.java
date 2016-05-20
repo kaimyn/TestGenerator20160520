@@ -275,8 +275,7 @@ public class UI extends javax.swing.JFrame {
 
         testTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
                 "Template", "TestID", "Function", "Target", "ActionList"
@@ -606,7 +605,8 @@ public class UI extends javax.swing.JFrame {
             model.setValueAt(test.getTime(2), i, 10);
             model.setValueAt(test.getTime(3), i, 11);*/
         }
-        for(int i = tests.size(); i<rCount; i++) {
+        for(int i = model.getRowCount(); i>tests.size(); i--) {
+            System.out.println(i + " vs " + tests.size());
             model.removeRow(i);
             System.out.println("removed row");
         }
