@@ -227,7 +227,7 @@ public class UI extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Template", "TestID", "Function", "Target", "P1", "P2", "P3", "P4", "T1", "T2", "T3", "T4"
+                "Template", "TestID", "Function", "Target", "Action List"
             }
         ));
         jScrollPane1.setViewportView(testTable);
