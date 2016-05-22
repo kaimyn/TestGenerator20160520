@@ -36,6 +36,8 @@ public class UI extends javax.swing.JFrame {
      */
     public UI() {
         initComponents();
+        actionTables = new ArrayList<JTable>();
+
         testTable.getModel().addTableModelListener(new TableModelListener() {
 
         public void tableChanged(TableModelEvent e) {
@@ -44,7 +46,17 @@ public class UI extends javax.swing.JFrame {
                 int col = e.getColumn();
                 //System.out.println(data);
                 String data = null;
+                System.out.println("testTable changed");
                 if(col!=4) data = (String)testTable.getValueAt(row, col);
+                else if(actionTable.getModel().getRowCount() >= 0) {
+                    System.out.println("update action table");
+                    int arow = actionTables.get(row).getSelectedRow();
+                    int acol = actionTables.get(row).getSelectedColumn();
+                    if(arow != -1) {
+                    String adata = (String)actionTables.get(row).getValueAt(arow, acol);
+                    actionTable.setValueAt(adata, arow, acol);
+                    }
+                }
                 updateXMLData(data, row, col);
             }
             }
@@ -479,6 +491,13 @@ public class UI extends javax.swing.JFrame {
     }//GEN-LAST:event_savetoXMLActionPerformed
 
     private void undoSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoSaveActionPerformed
+        testTable.clearSelection();
+        actionTable.clearSelection();
+        for(int i=0; i<actionTables.size(); i++) {
+            actionTables.get(i).clearSelection();
+        }
+        ((DefaultTableModel)actionTable.getModel()).setRowCount(0);
+        
         xml = FileIO.readXML(backup);
         addXML(xml);
         FileIO.xmlWrite(xml, xmlPath.getText());
@@ -609,13 +628,16 @@ public class UI extends javax.swing.JFrame {
         ACTION_TABLE_RELOAD = true;
         DefaultTableModel model = (DefaultTableModel)testTable.getModel();
         ArrayList<TestID> tests = xml.getTests();
-        actionTables = new ArrayList<JTable>();
+        //actionTables.clear();
         ArrayList<Action> actions;
         
         pathField.setText(xml.getPath());
         dateField.setText(xml.getDate());
         TestID test;
         TableColumn tc = testTable.getColumnModel().getColumn(4);
+        
+        //testTable.changeSelection(testTable.getSelectedRow(), 0, false, false);
+        updateActionTable(testTable.getSelectedRow());
         
         model.setRowCount(tests.size());
         for(int i = 0; i<tests.size(); i++) {
@@ -625,6 +647,8 @@ public class UI extends javax.swing.JFrame {
             model.setValueAt(test.getTestID(), i, 1);
             model.setValueAt(test.getFunction(), i, 2);
             model.setValueAt(test.getTarget(), i, 3);
+            
+            if(i>=actionTables.size()) {
             actionTables.add(i, new javax.swing.JTable());
             actionTables.get(i).setModel( new javax.swing.table.DefaultTableModel(
                 new Object [][] {
@@ -634,20 +658,34 @@ public class UI extends javax.swing.JFrame {
                     "Action", "Data"
                 }
             ));
+            
+            actionTables.get(i).getModel().addTableModelListener(new TableModelListener() {
+
+            public void tableChanged(TableModelEvent e) {
+                if(e.getType() == TableModelEvent.UPDATE && !ACTION_TABLE_RELOAD && testTable.getSelectedRow() != -1) {
+                    int row = e.getFirstRow();
+                    int col = e.getColumn();
+                    //System.out.println(data);
+                    String data = (String)actionTables.get(testTable.getSelectedRow()).getValueAt(row, col);
+                    ACTION_TABLE_RELOAD=true;
+                    actionTable.setValueAt(data, row, col);
+                    ACTION_TABLE_RELOAD=false;
+                    updateXMLData("unused", testTable.getSelectedRow(), 4);
+                }
+                }
+            });
+            }
+            
             DefaultTableModel actionModel = (DefaultTableModel) actionTables.get(i).getModel();
             actionModel.setRowCount(actions.size());
+            System.out.println("adding action table: " + actionModel.getRowCount());
             for(int j=0; j<actions.size(); j++) {
                 if(j+1>actionModel.getRowCount()) actionModel.addRow((Object[])null);
-                System.out.println(actions.size());
-                System.out.println(actions.get(j).getType());
                 actionModel.setValueAt(actions.get(j).getType(), j, 0);
                 actionModel.setValueAt(actions.get(j).getData(), j, 1);
             }
 
             model.setValueAt(actionTables.get(i), i, 4);
-            
-            
-            
             
             
             tc.setCellRenderer(new CustomTableCellRenderer(actionTables.get(i)));
@@ -668,10 +706,8 @@ public class UI extends javax.swing.JFrame {
             model.setValueAt(test.getTime(3), i, 11);*/
         }
         
-        
-        
         resizeColumnWidth(testTable);
-        updateActionTable(testTable.getSelectedRow());
+        
     }
     
     public void resizeColumnWidth(JTable table) {
@@ -690,7 +726,7 @@ public class UI extends javax.swing.JFrame {
     public static void updateXMLData(String data, int row, int col) {
         //xml.updateTest(data, row, col);
         
-        System.out.println("changing data");
+        //System.out.println("changing data");
         
         ArrayList<TestID> tests = xml.getTests();
         TestID item = tests.get(row);
@@ -726,17 +762,17 @@ public class UI extends javax.swing.JFrame {
     }
     
     private void updateActionTable(int row) {
-        if(row!=-1) {
+        if(row!=-1 && row<xml.getTests().size()) {
             ArrayList<Action> actions = xml.getTests().get(row).getActions();
             DefaultTableModel actionModel = (DefaultTableModel) actionTable.getModel();
 
             actionModel.setRowCount(actions.size());
             for(int j=0; j<actions.size(); j++) {
-                System.out.println(actions.size());
-                System.out.println(actions.get(j).getType());
                 actionModel.setValueAt(actions.get(j).getType(), j, 0);
                 actionModel.setValueAt(actions.get(j).getData(), j, 1);
             }
+        } else if(row>=xml.getTests().size()) {
+            ((DefaultTableModel)actionTable.getModel()).setRowCount(0);
         }
     }
     

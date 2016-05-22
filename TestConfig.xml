@@ -7,7 +7,7 @@
 			<Function F="Language" Target="CHS" />
 			<ActionList>
 				<Action Type="tap">1180 760</Action>
-				<Action Type="wait">2</Action>
+				<Action Type="wait">4</Action>
 				<Action Type="tap">0 0</Action>
 				<Action Type="wait">5</Action>
 				<Action Type="tap">0 0</Action>
