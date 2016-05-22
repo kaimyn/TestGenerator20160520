@@ -27,7 +27,6 @@ public class UI extends javax.swing.JFrame {
     private boolean ALLOW_COLUMN_SELECTION = false;
     private boolean ALLOW_ROW_SELECTION = true;
     private static boolean ACTION_TABLE_RELOAD = false;
-    private static MyMouseMotionListener mListener;
     private static ArrayList<JTable> actionTables;
     private static XMLData xml;
     private static ArrayList<TestID> lastDeleted = new ArrayList<TestID>();
@@ -46,10 +45,9 @@ public class UI extends javax.swing.JFrame {
                 int col = e.getColumn();
                 //System.out.println(data);
                 String data = null;
-                System.out.println("testTable changed");
                 if(col!=4) data = (String)testTable.getValueAt(row, col);
                 else if(actionTable.getModel().getRowCount() >= 0) {
-                    System.out.println("update action table");
+                    //System.out.println("update action table");
                     int arow = actionTables.get(row).getSelectedRow();
                     int acol = actionTables.get(row).getSelectedColumn();
                     if(arow != -1) {
@@ -68,9 +66,13 @@ public class UI extends javax.swing.JFrame {
             if(e.getType() == TableModelEvent.UPDATE && ACTION_TABLE_RELOAD == false) {
                 int row = e.getFirstRow();
                 int col = e.getColumn();
-                //System.out.println(data);
+                int trow = testTable.getSelectedRow();
+                int tcol = testTable.getSelectedColumn();
                 String data = (String)actionTable.getValueAt(row, col);
-                actionTables.get(testTable.getSelectedRow()).setValueAt(data, row, col);
+                System.out.println(data);
+                ((DefaultTableModel)actionTables.get(testTable.getSelectedRow()).getModel()).setValueAt(data, row, col);
+                testTable.changeSelection((trow+1) % testTable.getModel().getRowCount(), tcol, false, false);
+                testTable.changeSelection(trow, tcol, false, false);
                 updateXMLData("unused", testTable.getSelectedRow(), 4);
             }
             }
@@ -129,8 +131,6 @@ public class UI extends javax.swing.JFrame {
         }
         
         testTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        mListener = new MyMouseMotionListener();
-        //testTable.addMouseMotionListener(mListener);
         // Enable the ability to select a single cell 
         testTable.setColumnSelectionAllowed(true); 
         testTable.setRowSelectionAllowed(true); 
@@ -678,7 +678,7 @@ public class UI extends javax.swing.JFrame {
             
             DefaultTableModel actionModel = (DefaultTableModel) actionTables.get(i).getModel();
             actionModel.setRowCount(actions.size());
-            System.out.println("adding action table: " + actionModel.getRowCount());
+            //System.out.println("adding action table: " + actionModel.getRowCount());
             for(int j=0; j<actions.size(); j++) {
                 if(j+1>actionModel.getRowCount()) actionModel.addRow((Object[])null);
                 actionModel.setValueAt(actions.get(j).getType(), j, 0);
@@ -778,7 +778,7 @@ public class UI extends javax.swing.JFrame {
     
     private static String backup = "TestConfigBackup.xml";
     public static void saveXMLtoFile() {
-        System.out.println("changed data: " + xml.getTests().get(0).getTestID());
+        //System.out.println("changed data: " + xml.getTests().get(0).getTestID());
         FileIO.xmlWrite(xml, backup);
         System.out.println("saved data");
         lastDeleted.clear();
@@ -826,37 +826,6 @@ public class UI extends javax.swing.JFrame {
          
     }
      
-    class MyMouseMotionListener implements MouseMotionListener{
-         
-        @Override
-        public void mouseDragged(MouseEvent e) {
-        }
- 
-        @Override
-        public void mouseMoved(MouseEvent e) {
-            if(e.getComponent() instanceof JTable){
-                JTable tempTable = (JTable)e.getComponent();
-                 
-                TableColumnModel columnModel = tempTable.getColumnModel();
-                int viewColumn = columnModel.getColumnIndexAtX(e.getX());
-                int column = columnModel.getColumn(viewColumn).getModelIndex();
-                int row = tempTable.rowAtPoint(e.getPoint());
-                 
-                // change the if-statement to the columns you want to programmatically 
-                // enter edit mode of, when the mouse is over it.
-                if(column==0 || column==1 || column==2 || column==3 || column==4){
-                    // Set the cell on the row and column in edit mode 
-                    boolean success = tempTable.editCellAt(row, column);
-                    if (success) {
-                      boolean toggle = false;
-                      boolean extend = false;
-                      // Select cell 
-                      tempTable.changeSelection(row, column, toggle, extend);
-                    }
-                }
-            }
-        }
-    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable actionTable;

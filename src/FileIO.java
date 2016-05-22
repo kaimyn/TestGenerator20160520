@@ -260,7 +260,7 @@ public class FileIO {
                 a = tmp.getActions().iterator();
                 while(a.hasNext()) {
                     action = (Action)a.next();
-                    System.out.println(action.getType());
+                    //System.out.println(action.getType());
                     if(action.getType().equalsIgnoreCase("tap")) fw.write("adb shell \"input tap "+action.getData()+"\"\r\n");
                     else if(action.getType().equalsIgnoreCase("wait")) fw.write("timeout "+action.getData()+"\r\n");
                 }
