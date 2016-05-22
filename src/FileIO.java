@@ -189,15 +189,18 @@ public class FileIO {
     public static void genBash(XMLData xml) {
         
         Iterator i = xml.getTests().iterator();
+        TestID tmp;
+        Iterator a;
+        Action action;
         try {
             while(i.hasNext()) {
-                TestID tmp = (TestID) i.next();
+                tmp = (TestID) i.next();
 
 
                 //Generate batch 
                 String filename = tmp.getTemplate()+"_"+tmp.getFunction()+"_"+tmp.getTarget();
                 System.out.print(filename+"\r\n");
-                FileWriter fw=new FileWriter(filename+".bat",true);
+                FileWriter fw=new FileWriter(filename+".bat",false);
                 fw.write("@ECHO OFF\r\n");
                 fw.write(
                         "rem ***********************************************************************\r\n" +
@@ -253,8 +256,17 @@ public class FileIO {
                 fw.write("\r\n");
                 fw.write(":%test%\r\n");
                 fw.write("echo %test%\r\n");
-                /*fw.write("adb shell \"input tap "+tmp.getPoint(0)+"\"\r\n");
-                fw.write("timeout "+tmp.getTime(0)+"\r\n");
+                
+                a = tmp.getActions().iterator();
+                while(a.hasNext()) {
+                    action = (Action)a.next();
+                    System.out.println(action.getType());
+                    if(action.getType().equalsIgnoreCase("tap")) fw.write("adb shell \"input tap "+action.getData()+"\"\r\n");
+                    else if(action.getType().equalsIgnoreCase("wait")) fw.write("timeout "+action.getData()+"\r\n");
+                }
+                
+                /*
+                
                 fw.write("adb shell \"input tap "+tmp.getPoint(1)+"\"\r\n");
                 fw.write("timeout "+tmp.getTime(1)+"\r\n");
                 fw.write("adb shell \"input tap "+tmp.getPoint(2)+"\"\r\n");
@@ -268,6 +280,7 @@ public class FileIO {
                 fw.write("\r\n");
                 fw.write("adb shell \"input tap Pone4\""+tmp.getPoint(3)+"\r\n");
                 fw.write("timeout "+tmp.getTime(3)+"\r\n");*/
+                
                 fw.write("\r\n");
                 fw.write("\r\n");
                 fw.write("\r\n");
