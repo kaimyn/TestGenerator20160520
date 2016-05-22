@@ -11,12 +11,24 @@ import java.awt.Component;
 import javax.swing.filechooser.*;
 import java.io.File;
 import javax.swing.JTable;
+import javax.swing.AbstractCellEditor;
+import javax.swing.JScrollPane;
+import java.awt.event.*;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 /**
  *
  * @author kinining
  */
 public class UI extends javax.swing.JFrame {
 
+    private boolean DEBUG = false;
+    private boolean ALLOW_COLUMN_SELECTION = false;
+    private boolean ALLOW_ROW_SELECTION = true;
+    private static boolean ACTION_TABLE_RELOAD = false;
+    private static MyMouseMotionListener mListener;
+    private static ArrayList<JTable> actionTables;
     private static XMLData xml;
     private static ArrayList<TestID> lastDeleted = new ArrayList<TestID>();
     /**
@@ -30,15 +42,86 @@ public class UI extends javax.swing.JFrame {
             if(e.getType() == TableModelEvent.UPDATE) {
                 int row = e.getFirstRow();
                 int col = e.getColumn();
-                String data = (String)testTable.getValueAt(row, col);
                 //System.out.println(data);
+                String data = null;
+                if(col!=4) data = (String)testTable.getValueAt(row, col);
                 updateXMLData(data, row, col);
-                //System.out.println("just changed data: " + BatchGenerator_0516.xml.getTests().get(0).getTestID());
             }
             }
         });
         
+        actionTable.getModel().addTableModelListener(new TableModelListener() {
+
+        public void tableChanged(TableModelEvent e) {
+            if(e.getType() == TableModelEvent.UPDATE && ACTION_TABLE_RELOAD == false) {
+                int row = e.getFirstRow();
+                int col = e.getColumn();
+                //System.out.println(data);
+                String data = (String)actionTable.getValueAt(row, col);
+                actionTables.get(testTable.getSelectedRow()).setValueAt(data, row, col);
+                updateXMLData("unused", testTable.getSelectedRow(), 4);
+            }
+            }
+        });
+        
+        testTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        if (ALLOW_ROW_SELECTION) { // true by default
+            ListSelectionModel rowSM = testTable.getSelectionModel();
+            rowSM.addListSelectionListener(new ListSelectionListener() {
+                public void valueChanged(ListSelectionEvent e) {
+                    //Ignore extra messages.
+                    if (e.getValueIsAdjusting()) return;
+ 
+                    ListSelectionModel lsm = (ListSelectionModel)e.getSource();
+                    if (lsm.isSelectionEmpty()) {
+                        System.out.println("No rows are selected.");
+                    } else {
+                        int selectedRow = lsm.getMinSelectionIndex();
+                        System.out.println("Row " + selectedRow
+                                           + " is now selected.");
+                        ACTION_TABLE_RELOAD = true;
+                        updateActionTable(selectedRow);
+                        ACTION_TABLE_RELOAD = false;
+                    }
+                }
+            });
+        } else {
+            testTable.setRowSelectionAllowed(false);
+        }
+ 
+        if (ALLOW_COLUMN_SELECTION) { // false by default
+            if (ALLOW_ROW_SELECTION) {
+                //We allow both row and column selection, which
+                //implies that we *really* want to allow individual
+                //cell selection.
+                testTable.setCellSelectionEnabled(true);
+            }
+            testTable.setColumnSelectionAllowed(true);
+            ListSelectionModel colSM =
+                testTable.getColumnModel().getSelectionModel();
+            colSM.addListSelectionListener(new ListSelectionListener() {
+                public void valueChanged(ListSelectionEvent e) {
+                    //Ignore extra messages.
+                    if (e.getValueIsAdjusting()) return;
+ 
+                    ListSelectionModel lsm = (ListSelectionModel)e.getSource();
+                    if (lsm.isSelectionEmpty()) {
+                        System.out.println("No columns are selected.");
+                    } else {
+                        int selectedCol = lsm.getMinSelectionIndex();
+                        System.out.println("Column " + selectedCol
+                                           + " is now selected.");
+                    }
+                }
+            });
+        }
+        
         testTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        mListener = new MyMouseMotionListener();
+        //testTable.addMouseMotionListener(mListener);
+        // Enable the ability to select a single cell 
+        testTable.setColumnSelectionAllowed(true); 
+        testTable.setRowSelectionAllowed(true); 
     }
 
     /**
@@ -50,28 +133,20 @@ public class UI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         dateField = new javax.swing.JTextField();
         pathField = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
         functionField = new javax.swing.JTextField();
         targetField = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        p1Field = new javax.swing.JTextField();
-        p2Field = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         templateField = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         idField = new javax.swing.JTextField();
-        p3Field = new javax.swing.JTextField();
-        p4Field = new javax.swing.JTextField();
-        t1Field = new javax.swing.JTextField();
-        t2Field = new javax.swing.JTextField();
-        t3Field = new javax.swing.JTextField();
-        t4Field = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         testTable = new javax.swing.JTable();
         savetoXML = new javax.swing.JButton();
@@ -83,6 +158,23 @@ public class UI extends javax.swing.JFrame {
         addTestButton = new javax.swing.JButton();
         undoDeleteButton = new javax.swing.JButton();
         generateButton = new javax.swing.JButton();
+        addActionButton = new javax.swing.JButton();
+        delActionButton = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        actionTable = new javax.swing.JTable();
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(jTable1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Bash Generator");
@@ -121,8 +213,6 @@ public class UI extends javax.swing.JFrame {
 
         jLabel5.setText("Function");
 
-        jLabel6.setText("Point");
-
         functionField.setText("Function");
         functionField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -131,10 +221,6 @@ public class UI extends javax.swing.JFrame {
         });
 
         targetField.setText("Target");
-
-        jLabel7.setText("TIME");
-
-        p2Field.setPreferredSize(new java.awt.Dimension(50, 26));
 
         jLabel4.setText("Template");
 
@@ -148,8 +234,6 @@ public class UI extends javax.swing.JFrame {
             }
         });
 
-        t2Field.setPreferredSize(new java.awt.Dimension(50, 26));
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -158,19 +242,9 @@ public class UI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel7))
+                    .addComponent(jLabel3))
                 .addGap(21, 21, 21)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(t1Field, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(t2Field, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(t3Field, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(t4Field, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(idField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -180,15 +254,7 @@ public class UI extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(functionField, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(targetField, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(p1Field, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(p2Field, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(p3Field, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(p4Field, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(targetField, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(32, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -204,22 +270,7 @@ public class UI extends javax.swing.JFrame {
                     .addComponent(jLabel5)
                     .addComponent(functionField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(targetField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(p1Field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(p2Field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(p3Field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(p4Field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(t1Field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(t2Field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(t3Field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(t4Field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel7))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         testTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -231,6 +282,9 @@ public class UI extends javax.swing.JFrame {
             }
         ));
         jScrollPane1.setViewportView(testTable);
+        if (testTable.getColumnModel().getColumnCount() > 0) {
+            testTable.getColumnModel().getColumn(3).setCellRenderer(null);
+        }
 
         savetoXML.setText("Save to XML");
         savetoXML.addActionListener(new java.awt.event.ActionListener() {
@@ -294,6 +348,30 @@ public class UI extends javax.swing.JFrame {
             }
         });
 
+        addActionButton.setText("Add Action");
+        addActionButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addActionButtonActionPerformed(evt);
+            }
+        });
+
+        delActionButton.setText("Delete Action");
+        delActionButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                delActionButtonActionPerformed(evt);
+            }
+        });
+
+        actionTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Action", "Data"
+            }
+        ));
+        jScrollPane3.setViewportView(actionTable);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -301,7 +379,14 @@ public class UI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(undoDeleteButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(deleteButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(addTestButton, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -327,13 +412,14 @@ public class UI extends javax.swing.JFrame {
                                 .addComponent(generateButton)))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(undoDeleteButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(deleteButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(addTestButton, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(305, Short.MAX_VALUE))))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 432, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(delActionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(addActionButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -349,25 +435,32 @@ public class UI extends javax.swing.JFrame {
                     .addComponent(dateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addComponent(pathField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(43, 43, 43)
                         .addComponent(addTestButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(deleteButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(undoDeleteButton))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 432, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addComponent(addActionButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(delActionButton)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(undoSave)
                     .addComponent(savetoXML)
                     .addComponent(generateButton))
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         pack();
@@ -424,10 +517,8 @@ public class UI extends javax.swing.JFrame {
 
     private void addTestButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addTestButtonActionPerformed
         if(!idField.getText().isEmpty() && !templateField.getText().isEmpty()) {
-            String [] p = {p1Field.getText(), p2Field.getText(), p3Field.getText(), p4Field.getText()};
-            String [] t = {t1Field.getText(), t2Field.getText(), t3Field.getText(), t4Field.getText()};
-            //TestID newTest = new TestID(idField.getText(), templateField.getText(), functionField.getText(), targetField.getText(), p, t);
-            //xml.addTest(newTest);
+            TestID newTest = new TestID(idField.getText(), templateField.getText(), functionField.getText(), targetField.getText(), new ArrayList<Action>());
+            xml.addTest(newTest);
             addXML(xml);
         }
     }//GEN-LAST:event_addTestButtonActionPerformed
@@ -459,6 +550,22 @@ public class UI extends javax.swing.JFrame {
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
         if(xml!= null) FileIO.genBash(xml);
     }//GEN-LAST:event_generateButtonActionPerformed
+
+    private void addActionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionButtonActionPerformed
+        int row = testTable.getSelectedRow();
+        ArrayList<TestID> tests = xml.getTests();
+        tests.get(row).getActions().add(new Action("new", "data"));
+        xml.setTests(tests);
+        addXML(xml);
+    }//GEN-LAST:event_addActionButtonActionPerformed
+
+    private void delActionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delActionButtonActionPerformed
+        int row = actionTable.getSelectedRow();
+        if(row != -1) {
+            xml.removeAction(testTable.getSelectedRow(), row);
+            addXML(xml);
+        }
+    }//GEN-LAST:event_delActionButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -499,21 +606,58 @@ public class UI extends javax.swing.JFrame {
     }
     
     public void addXML(XMLData xml) {
-        
+        ACTION_TABLE_RELOAD = true;
         DefaultTableModel model = (DefaultTableModel)testTable.getModel();
         ArrayList<TestID> tests = xml.getTests();
-        int rCount = model.getRowCount();
+        actionTables = new ArrayList<JTable>();
+        ArrayList<Action> actions;
         
         pathField.setText(xml.getPath());
         dateField.setText(xml.getDate());
         TestID test;
+        TableColumn tc = testTable.getColumnModel().getColumn(4);
+        
+        model.setRowCount(tests.size());
         for(int i = 0; i<tests.size(); i++) {
-            if(i+1>rCount) model.addRow((Object[])null);
+            actions = tests.get(i).getActions();
             test = tests.get(i);
             model.setValueAt(test.getTemplate(), i, 0);
             model.setValueAt(test.getTestID(), i, 1);
             model.setValueAt(test.getFunction(), i, 2);
             model.setValueAt(test.getTarget(), i, 3);
+            actionTables.add(i, new javax.swing.JTable());
+            actionTables.get(i).setModel( new javax.swing.table.DefaultTableModel(
+                new Object [][] {
+
+                },
+                new String [] {
+                    "Action", "Data"
+                }
+            ));
+            DefaultTableModel actionModel = (DefaultTableModel) actionTables.get(i).getModel();
+            actionModel.setRowCount(actions.size());
+            for(int j=0; j<actions.size(); j++) {
+                if(j+1>actionModel.getRowCount()) actionModel.addRow((Object[])null);
+                System.out.println(actions.size());
+                System.out.println(actions.get(j).getType());
+                actionModel.setValueAt(actions.get(j).getType(), j, 0);
+                actionModel.setValueAt(actions.get(j).getData(), j, 1);
+            }
+
+            model.setValueAt(actionTables.get(i), i, 4);
+            
+            
+            
+            
+            
+            tc.setCellRenderer(new CustomTableCellRenderer(actionTables.get(i)));
+            tc.setCellEditor(new CustomTableCellEditor(actionTables.get(i)));
+            testTable.setRowHeight(100);
+            //actionTables.get(i).addMouseMotionListener(mListener);
+            // Enable the ability to select a single cell 
+            actionTables.get(i).setColumnSelectionAllowed(true); 
+            actionTables.get(i).setRowSelectionAllowed(true); 
+            ACTION_TABLE_RELOAD = false;
             /*model.setValueAt(test.getPoint(0), i, 4);
             model.setValueAt(test.getPoint(1), i, 5);
             model.setValueAt(test.getPoint(2), i, 6);
@@ -523,11 +667,13 @@ public class UI extends javax.swing.JFrame {
             model.setValueAt(test.getTime(2), i, 10);
             model.setValueAt(test.getTime(3), i, 11);*/
         }
-        for(int i = tests.size(); i<rCount; i++) {
-            model.removeRow(i);
-        }
+        
+        
+        
         resizeColumnWidth(testTable);
+        updateActionTable(testTable.getSelectedRow());
     }
+    
     public void resizeColumnWidth(JTable table) {
         final TableColumnModel columnModel = table.getColumnModel();
         for (int column = 0; column < table.getColumnCount(); column++) {
@@ -544,7 +690,8 @@ public class UI extends javax.swing.JFrame {
     public static void updateXMLData(String data, int row, int col) {
         //xml.updateTest(data, row, col);
         
-        System.out.println("changign data");
+        System.out.println("changing data");
+        
         ArrayList<TestID> tests = xml.getTests();
         TestID item = tests.get(row);
         switch(col) {
@@ -556,9 +703,6 @@ public class UI extends javax.swing.JFrame {
                     item.setTestID(data);
                     tests.set(row, item);
                     xml.setTests(tests);
-                    System.out.println("raw data: " + data);
-                    System.out.println("change testid");
-                    System.out.println("just changed data: " + xml.getTests().get(0).getTestID());
                     break;
                 case 2:
                     item.setFunction(data);
@@ -568,41 +712,32 @@ public class UI extends javax.swing.JFrame {
                     item.setTarget(data);
                     tests.set(row, item);
                     break;
-                /*case 4:
-                    item.setPoint(0, data);
+                case 4:
+                    JTable table = actionTables.get(row);
+                    ArrayList<Action> actions = new ArrayList<Action>();
+                    for(int i =0; i<table.getRowCount(); i++) {
+                        actions.add(new Action((String)table.getValueAt(i, 0), (String)table.getValueAt(i, 1)));
+                    }
+                    item.setActions(actions);
                     tests.set(row, item);
                     break;
-                case 5:
-                    item.setPoint(1, data);
-                    tests.set(row, item);
-                    break;
-                case 6:
-                    item.setPoint(2, data);
-                    tests.set(row, item);
-                    break;
-                case 7:
-                    item.setPoint(3, data);
-                    tests.set(row, item);
-                    break;
-                case 8:
-                    item.setTime(0, data);
-                    tests.set(row, item);
-                    break;
-                case 9:
-                    item.setTime(1, data);
-                    tests.set(row, item);
-                    break;
-                case 10:
-                    item.setTime(2, data);
-                    tests.set(row, item);
-                    break;
-                case 11:
-                    item.setTime(3, data);
-                    tests.set(row, item);
-                    break;*/
         }
         xml.setTests(tests);
-        System.out.println("just changed data: " + xml.getTests().get(0).getTestID());
+    }
+    
+    private void updateActionTable(int row) {
+        if(row!=-1) {
+            ArrayList<Action> actions = xml.getTests().get(row).getActions();
+            DefaultTableModel actionModel = (DefaultTableModel) actionTable.getModel();
+
+            actionModel.setRowCount(actions.size());
+            for(int j=0; j<actions.size(); j++) {
+                System.out.println(actions.size());
+                System.out.println(actions.get(j).getType());
+                actionModel.setValueAt(actions.get(j).getType(), j, 0);
+                actionModel.setValueAt(actions.get(j).getData(), j, 1);
+            }
+        }
     }
     
     private static String backup = "TestConfigBackup.xml";
@@ -613,10 +748,87 @@ public class UI extends javax.swing.JFrame {
         lastDeleted.clear();
     }
 
+    class CustomTableCellRenderer extends DefaultTableCellRenderer {
+        private static final long serialVersionUID = 4415155875184525824L;
+        JTable table;
+         
+        CustomTableCellRenderer(JTable table){
+            this.table=table;
+            this.table.setOpaque(true);
+            this.table.setAlignmentY(JTable.LEFT_ALIGNMENT);
+        }
+         
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+            this.table=(JTable)value;
+            return this.table;
+        }
+    }
+    
+    class CustomTableCellEditor extends AbstractCellEditor implements TableCellEditor{
+ 
+        JTable table;
+        
+        CustomTableCellEditor(JTable table){
+            this.table=table;
+            this.table.setOpaque(true);
+            this.table.setAlignmentY(JTable.LEFT_ALIGNMENT);
+        }
+         
+        @Override
+        public Component getTableCellEditorComponent(JTable table,
+                Object value, boolean isSelected, int row, int column) {
+            this.table=(JTable)value;
+            return new JScrollPane(this.table);
+        }
+ 
+        @Override
+        public Object getCellEditorValue() {
+            return this.table;
+        }
+         
+    }
+     
+    class MyMouseMotionListener implements MouseMotionListener{
+         
+        @Override
+        public void mouseDragged(MouseEvent e) {
+        }
+ 
+        @Override
+        public void mouseMoved(MouseEvent e) {
+            if(e.getComponent() instanceof JTable){
+                JTable tempTable = (JTable)e.getComponent();
+                 
+                TableColumnModel columnModel = tempTable.getColumnModel();
+                int viewColumn = columnModel.getColumnIndexAtX(e.getX());
+                int column = columnModel.getColumn(viewColumn).getModelIndex();
+                int row = tempTable.rowAtPoint(e.getPoint());
+                 
+                // change the if-statement to the columns you want to programmatically 
+                // enter edit mode of, when the mouse is over it.
+                if(column==0 || column==1 || column==2 || column==3 || column==4){
+                    // Set the cell on the row and column in edit mode 
+                    boolean success = tempTable.editCellAt(row, column);
+                    if (success) {
+                      boolean toggle = false;
+                      boolean extend = false;
+                      // Select cell 
+                      tempTable.changeSelection(row, column, toggle, extend);
+                    }
+                }
+            }
+        }
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable actionTable;
+    private javax.swing.JButton addActionButton;
     private javax.swing.JButton addTestButton;
     private javax.swing.JButton browseButton;
     private javax.swing.JTextField dateField;
+    private javax.swing.JButton delActionButton;
     private javax.swing.JButton deleteButton;
     private javax.swing.JTextField functionField;
     private javax.swing.JButton generateButton;
@@ -626,21 +838,14 @@ public class UI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField p1Field;
-    private javax.swing.JTextField p2Field;
-    private javax.swing.JTextField p3Field;
-    private javax.swing.JTextField p4Field;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTable jTable1;
     private javax.swing.JTextField pathField;
     private javax.swing.JButton reloadButton;
     private javax.swing.JButton savetoXML;
-    private javax.swing.JTextField t1Field;
-    private javax.swing.JTextField t2Field;
-    private javax.swing.JTextField t3Field;
-    private javax.swing.JTextField t4Field;
     private javax.swing.JTextField targetField;
     private javax.swing.JTextField templateField;
     private javax.swing.JTable testTable;

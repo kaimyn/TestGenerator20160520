@@ -72,4 +72,8 @@ public class XMLData {
         return target;
     }
     
+    public void removeAction(int test, int action) {
+        tests.get(test).actionList.remove(action);
+    }
+    
 }

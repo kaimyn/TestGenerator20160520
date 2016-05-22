@@ -58,7 +58,8 @@ public class TestID implements Comparable<TestID>{
                 for(int j=0; j<actionNodes.getLength(); j++) {
                     aNode = actionNodes.item(j);
                     if(aNode.getNodeType()==Node.ELEMENT_NODE) {
-                        actionList.add(new Action(((Element)aNode).getAttribute("type"), aNode.getTextContent()));
+                        System.out.println(((Element)aNode).getAttribute("Type") + " : " + aNode.getTextContent());
+                        actionList.add(new Action(((Element)aNode).getAttribute("Type"), aNode.getTextContent()));
                     }
                 }
             }

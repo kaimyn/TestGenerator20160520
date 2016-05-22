@@ -1,20 +1,101 @@
 <?xml version="1.0"?>
 <FrontEnd>
-    <Date>20160516</Date>
-    <Path>C:/</Path>
-    <Template Temp="Genite101">
-        <TestID TID="0001">
-            <Function F="Lanague" Target="CHS"/>
-            <ActionList>
-                <Action Type="tap">1180 760"</Action>
-                <Action Type="wait">2</Action>
-                <Action Type="tap">0 0</Action>
-                <Action Type="wait">5</Action>
-                <Action Type="tap">0 0</Action>
-                <Action Type="wait">0</Action>
-                <Action Type="tap">0</Action>
-                <Action Type="wait">0</Action>
-            </ActionList>
-        </TestID>
-    </Template>
+	<Date>20160516</Date>
+	<Path>C:/</Path>
+	<Template Temp="Genite101">
+		<TestID TID="0001">
+			<Function F="Language" Target="CHS" />
+			<ActionList>
+				<Action Type="tap">1180 760</Action>
+				<Action Type="wait">2</Action>
+				<Action Type="tap">0 0</Action>
+				<Action Type="wait">5</Action>
+				<Action Type="tap">0 0</Action>
+				<Action Type="wait">0</Action>
+				<Action Type="tap">0</Action>
+				<Action Type="wait">0</Action>
+				<Action Type="tap">1180 760</Action>
+				<Action Type="wait">2</Action>
+				<Action Type="tap">0 0</Action>
+				<Action Type="wait">5</Action>
+				<Action Type="tap">0 0</Action>
+				<Action Type="wait">0</Action>
+				<Action Type="tap">0</Action>
+				<Action Type="wait">0</Action>
+			</ActionList>
+		</TestID>
+		<TestID TID="0002">
+			<Function F="Language" Target="FR" />
+			<ActionList>
+				<Action Type="tap">1180 760</Action>
+				<Action Type="wait">3</Action>
+				<Action Type="tap">0 0</Action>
+				<Action Type="wait">5</Action>
+				<Action Type="tap">0 0</Action>
+				<Action Type="wait">0</Action>
+				<Action Type="tap">0</Action>
+				<Action Type="wait">0</Action>
+			</ActionList>
+		</TestID>
+		<TestID TID="0003">
+			<Function F="Language" Target="SPA" />
+			<ActionList>
+				<Action Type="tap">1180 760</Action>
+				<Action Type="wait">4</Action>
+				<Action Type="tap">0 0</Action>
+				<Action Type="wait">5</Action>
+				<Action Type="tap">0 0</Action>
+				<Action Type="wait">0</Action>
+				<Action Type="tap">0</Action>
+				<Action Type="wait">0</Action>
+			</ActionList>
+		</TestID>
+		<TestID TID="0004">
+			<Function F="Language" Target="ENG" />
+			<ActionList>
+				<Action Type="tap">1180 760</Action>
+				<Action Type="wait">5</Action>
+				<Action Type="tap">0 0</Action>
+				<Action Type="wait">5</Action>
+				<Action Type="tap">0 0</Action>
+				<Action Type="wait">0</Action>
+				<Action Type="tap">0</Action>
+				<Action Type="wait">0</Action>
+				<Action Type="tap">1180 760</Action>
+				<Action Type="wait">2</Action>
+				<Action Type="tap">0 0</Action>
+				<Action Type="wait">5</Action>
+				<Action Type="tap">0 0</Action>
+				<Action Type="wait">0</Action>
+				<Action Type="tap">0</Action>
+				<Action Type="wait">0</Action>
+				<Action Type="tap">1180 760</Action>
+				<Action Type="wait">2</Action>
+				<Action Type="tap">0 0</Action>
+				<Action Type="wait">5</Action>
+				<Action Type="tap">0 0</Action>
+				<Action Type="wait">0</Action>
+				<Action Type="tap">0</Action>
+				<Action Type="wait">0</Action>
+				<Action Type="tap">1180 760</Action>
+				<Action Type="wait">2</Action>
+				<Action Type="tap">0 0</Action>
+				<Action Type="wait">5</Action>
+				<Action Type="tap">0 0</Action>
+				<Action Type="wait">0</Action>
+				<Action Type="tap">0</Action>
+				<Action Type="wait">0</Action>
+			</ActionList>
+		</TestID>
+		<TestID TID="1234">
+			<Function F="Function" Target="Target" />
+			<ActionList>
+				<Action Type="new">data</Action>
+				<Action Type="new">data</Action>
+				<Action Type="new">data</Action>
+				<Action Type="new">data</Action>
+				<Action Type="new">data</Action>
+			</ActionList>
+		</TestID>
+	</Template>
 </FrontEnd>
